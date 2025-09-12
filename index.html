@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nat2Bool - AI Boolean Search Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="grid-background"></div>
+
+    <div class="neon-orb orb-1"></div>
+    <div class="neon-orb orb-2"></div>
+    <div class="neon-orb orb-3"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🔧</div>
+                <h1>Nat2Bool</h1>
+            </div>
+            <p class="tagline">Next-gen Boolean Query Generator</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <input
+                        type="text"
+                        class="search-input"
+                        placeholder="Describe your search intent in natural language..."
+                        id="searchInput"
+                    />
+                    <button class="search-btn" id="generateBtn">
+                        Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">Local</div>
+                <div class="stat-label">AI Processing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Max</div>
+                <div class="stat-label">Precision</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>AI Engine Ready</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
