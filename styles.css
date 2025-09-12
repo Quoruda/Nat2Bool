@@ -293,29 +293,6 @@ body {
     letter-spacing: 1px;
 }
 
-.status-indicator {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 12px 20px;
-    border-radius: 25px;
-    border: 1px solid rgba(0, 255, 128, 0.3);
-    backdrop-filter: blur(10px);
-    font-size: 0.9rem;
-    animation: slideInRight 1s ease-out 1s both;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background: #00ff80;
-    border-radius: 50%;
-    animation: blink 2s ease-in-out infinite;
-}
 
 @keyframes blink {
     0%, 100% { opacity: 1; }
@@ -367,11 +344,6 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .status-indicator {
-        bottom: 20px;
-        right: 20px;
-        font-size: 0.8rem;
-    }
 }
 
 .settings-btn {
