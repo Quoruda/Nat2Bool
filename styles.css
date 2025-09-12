@@ -462,3 +462,18 @@ body {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
+
+.settings-group input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.search-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
