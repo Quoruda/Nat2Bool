@@ -19,29 +19,33 @@ searchInput.addEventListener('input', function() {
     }
 });
 
-// Generate button animation
+// Generate button animation and search
 generateBtn.addEventListener('click', function() {
     const query = searchInput.value.trim();
     if (query) {
         // Button animation
         this.style.background = 'linear-gradient(45deg, #00ff80, #00ffff)';
-        this.textContent = 'PROCESSING...';
+        this.textContent = 'SEARCHING...';
         this.style.transform = 'scale(0.95)';
-
-        // Simulate processing
-        setTimeout(() => {
-            this.style.background = 'linear-gradient(45deg, #00ffff, #0080ff)';
-            this.textContent = 'GENERATE';
-            this.style.transform = 'scale(1)';
-        }, 2500);
 
         // Update status during processing
         const statusIndicator = document.querySelector('.status-indicator span');
-        statusIndicator.textContent = 'Processing Query...';
+        statusIndicator.textContent = 'Redirecting to Google...';
 
+        // Redirect to Google search after animation
         setTimeout(() => {
+            const encodedQuery = encodeURIComponent(query);
+            const googleUrl = `https://www.google.com/search?q=${encodedQuery}`;
+            window.open(googleUrl, '_blank');
+
+            // Reset button
+            this.style.background = 'linear-gradient(45deg, #00ffff, #0080ff)';
+            this.textContent = 'GENERATE';
+            this.style.transform = 'scale(1)';
+
+            // Reset status
             statusIndicator.textContent = 'AI Engine Ready';
-        }, 2500);
+        }, 1000);
     }
 });
 
