@@ -55,3 +55,71 @@ searchInput.addEventListener('keypress', function(e) {
         generateBtn.click();
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const generateBtn = document.getElementById("generateBtn");
+    const searchInput = document.getElementById("searchInput");
+
+    // Fonction existante
+    generateBtn.addEventListener("click", () => {
+        const query = searchInput.value.trim();
+        if (query) {
+            console.log("User query:", query);
+            // TODO: Envoyer la requête vers l'IA plus tard
+        }
+    });
+
+    // Gestion du modal Paramètres
+    const settingsBtn = document.getElementById("settingsBtn");
+    const modal = document.getElementById("settingsModal");
+    const closeModal = document.getElementById("closeModal");
+    const saveBtn = document.querySelector(".save-btn");
+
+    const searchEngineSelect = document.getElementById("searchEngine");
+    const aiChoiceSelect = document.getElementById("aiChoice");
+    const themeChoiceSelect = document.getElementById("themeChoice");
+
+    // Ouvrir/Fermer modal
+    settingsBtn.addEventListener("click", () => {
+        modal.style.display = "flex";
+    });
+
+    closeModal.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Sauvegarder paramètres
+    saveBtn.addEventListener("click", () => {
+        const settings = {
+            searchEngine: searchEngineSelect.value,
+            aiChoice: aiChoiceSelect.value,
+            themeChoice: themeChoiceSelect.value
+        };
+
+        localStorage.setItem("nat2bool-settings", JSON.stringify(settings));
+        console.log("Paramètres sauvegardés :", settings);
+
+        modal.style.display = "none";
+    });
+
+    // Charger paramètres sauvegardés
+    function loadSettings() {
+        const saved = localStorage.getItem("nat2bool-settings");
+        if (saved) {
+            const settings = JSON.parse(saved);
+            searchEngineSelect.value = settings.searchEngine || "Google";
+            aiChoiceSelect.value = settings.aiChoice || "OpenAI";
+            themeChoiceSelect.value = settings.themeChoice || "Cyberpunk";
+            console.log("Paramètres chargés :", settings);
+        }
+    }
+
+    loadSettings();
+});
+

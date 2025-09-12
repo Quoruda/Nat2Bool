@@ -20,6 +20,7 @@
                 <h1>Nat2Bool</h1>
             </div>
             <p class="tagline">Next-gen Boolean Query Generator</p>
+            <button class="settings-btn" id="settingsBtn">⚙️ Paramètres</button>
         </div>
 
         <div class="search-section">
@@ -53,6 +54,38 @@
     <div class="status-indicator">
         <div class="status-dot"></div>
         <span>AI Engine Ready</span>
+    </div>
+
+    <!-- Paramètres Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2>Paramètres</h2>
+            <div class="settings-group">
+                <label for="searchEngine">Moteur de recherche</label>
+                <select id="searchEngine">
+                    <option>Google</option>
+                    <option>Bing</option>
+                    <option>DuckDuckGo</option>
+                </select>
+            </div>
+            <div class="settings-group">
+                <label for="aiChoice">IA</label>
+                <select id="aiChoice">
+                    <option>OpenAI</option>
+                    <option>Local</option>
+                </select>
+            </div>
+            <div class="settings-group">
+                <label for="themeChoice">Thème</label>
+                <select id="themeChoice">
+                    <option>Cyberpunk</option>
+                    <option>Clair</option>
+                    <option>Sombre</option>
+                </select>
+            </div>
+            <button class="save-btn">Enregistrer (non-fonctionnel)</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
