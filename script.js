@@ -97,6 +97,13 @@ Always return only one result string (URL or query) that best matches the user�
 User:
 `
 
+function setTheme(themeName) {
+    const themeLink = document.getElementById("themeStylesheet");
+    themeLink.href = `styles/${themeName}.css`;
+    localStorage.setItem("nat2bool-theme", themeName);
+}
+
+
 // === Gestion des paramètres ===
 function loadSettings() {
     const saved = localStorage.getItem("nat2bool-settings");
@@ -108,6 +115,7 @@ function loadSettings() {
         if (aiChoiceSelect) aiChoiceSelect.value = settings.aiChoice || "OpenAI";
         if (themeChoiceSelect) themeChoiceSelect.value = settings.themeChoice || "Cyberpunk";
         if (apiKeyInput) apiKeyInput.value = settings.apiKey || "";
+        setTheme(themeChoiceSelect.value);
     } catch (err) {
         console.warn("Impossible de parser nat2bool-settings :", err);
     }
@@ -123,6 +131,7 @@ function saveSettings() {
 
     localStorage.setItem("nat2bool-settings", JSON.stringify(settings));
     console.log("Paramètres sauvegardés :", settings);
+    loadSettings();
     if (modal) modal.style.display = "none";
     return settings;
 }
@@ -262,8 +271,9 @@ function setupModal() {
          if (modal) modal.style.display = "flex";
     });
     if (closeModal) closeModal.addEventListener("click", () => {
-        loadSettings();
-         if (modal) modal.style.display = "none"; }
+         if (modal) modal.style.display = "none";
+         loadSettings();
+    }
     );
     window.addEventListener("click", e => {
         if (e.target === modal) {
@@ -272,6 +282,8 @@ function setupModal() {
     });
     if (saveBtn) saveBtn.addEventListener("click", saveSettings);
 }
+
+
 
 // === Initialisation ===
 function init() {
