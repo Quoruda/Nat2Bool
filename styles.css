@@ -16,8 +16,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Cyberpunk grid background */
-.grid-background {
+.background {
     position: fixed;
     top: 0;
     left: 0;
