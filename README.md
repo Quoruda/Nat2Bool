@@ -16,7 +16,7 @@ Powered by LLMs like **Mistral** or **OpenAI**, it takes plain requests (e.g. *"
   Transforms natural language into optimized queries with operators like `AND`, `OR`, `NOT`, `filetype:`, `site:`, `intitle:`…
 
 - ⚙️ **Customizable AI & search engine**
-  Choose between **Mistral**, **OpenAI**, or a **local model**. Pick your favorite search engine (Google, Bing, DuckDuckGo).
+  Choose between **Mistral** or a **local model**. Pick your favorite search engine (Google, Bing, DuckDuckGo).
 
 - 🎨 **Beautiful cyberpunk-inspired UI**
   Neon-glow interface with smooth animations and a futuristic vibe.
