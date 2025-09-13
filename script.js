@@ -16,6 +16,13 @@ const apiKeyInput = document.getElementById("apiKey");
 let isGenerating = false;
 let originalGenerateText = generateBtn ? generateBtn.innerText : "Generate";
 
+const DEFAULT_SETTINGS = {
+    searchEngine: "Google",
+    aiChoice: "Mistral",
+    themeChoice: "cyberpunk",
+    apiKey: ""
+};
+
 const prompt = `
 You are an expert assistant specialized in information retrieval and advanced search query generation for Google.
 
@@ -107,19 +114,24 @@ function setTheme(themeName) {
 // === Gestion des paramètres ===
 function loadSettings() {
     const saved = localStorage.getItem("nat2bool-settings");
-    if (!saved) return;
+    let settings = DEFAULT_SETTINGS;
 
-    try {
-        const settings = JSON.parse(saved);
-        if (searchEngineSelect) searchEngineSelect.value = settings.searchEngine || "Google";
-        if (aiChoiceSelect) aiChoiceSelect.value = settings.aiChoice || "OpenAI";
-        if (themeChoiceSelect) themeChoiceSelect.value = settings.themeChoice || "cyberpunk";
-        if (apiKeyInput) apiKeyInput.value = settings.apiKey || "";
-        setTheme(themeChoiceSelect.value);
-    } catch (err) {
-        console.warn("Impossible de parser nat2bool-settings :", err);
+    if (saved) {
+        try {
+            settings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        } catch (err) {
+            console.warn("Impossible de parser nat2bool-settings :", err);
+            settings = DEFAULT_SETTINGS;
+        }
     }
+
+    searchEngineSelect.value = settings.searchEngine;
+    aiChoiceSelect.value = settings.aiChoice;
+    themeChoiceSelect.value = settings.themeChoice;
+    apiKeyInput.value = settings.apiKey;
+    setTheme(settings.themeChoice);
 }
+
 
 function saveSettings() {
     const settings = {
