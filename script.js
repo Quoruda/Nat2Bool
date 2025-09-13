@@ -259,8 +259,13 @@ async function handleGenerateClick() {
 
 // === Gestion du modal ===
 function setupModal() {
-    if (settingsBtn) settingsBtn.addEventListener("click", () => { if (modal) modal.style.display = "flex"; });
-    if (closeModal) closeModal.addEventListener("click", () => { if (modal) modal.style.display = "none"; });
+    if (settingsBtn) settingsBtn.addEventListener("click", () => {
+         if (modal) modal.style.display = "flex";
+    });
+    if (closeModal) closeModal.addEventListener("click", () => {
+        loadSettings();
+         if (modal) modal.style.display = "none"; }
+    );
     window.addEventListener("click", e => {
         if (e.target === modal) {
             modal.style.display = "none";
