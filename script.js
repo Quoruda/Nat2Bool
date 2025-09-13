@@ -113,7 +113,7 @@ function loadSettings() {
         const settings = JSON.parse(saved);
         if (searchEngineSelect) searchEngineSelect.value = settings.searchEngine || "Google";
         if (aiChoiceSelect) aiChoiceSelect.value = settings.aiChoice || "OpenAI";
-        if (themeChoiceSelect) themeChoiceSelect.value = settings.themeChoice || "Cyberpunk";
+        if (themeChoiceSelect) themeChoiceSelect.value = settings.themeChoice || "cyberpunk";
         if (apiKeyInput) apiKeyInput.value = settings.apiKey || "";
         setTheme(themeChoiceSelect.value);
     } catch (err) {
