@@ -12,15 +12,22 @@ const aiChoiceSelect = document.getElementById("aiChoice");
 const themeChoiceSelect = document.getElementById("themeChoice");
 const apiKeyInput = document.getElementById("apiKey");
 
+const apiUrlGroup = document.getElementById("apiUrlGroup");
+const apiUrlInput = document.getElementById("apiUrl");
+
+
 // === Etat local ===
 let isGenerating = false;
 let originalGenerateText = generateBtn ? generateBtn.innerText : "Generate";
 
+
+
 const DEFAULT_SETTINGS = {
     searchEngine: "Google",
-    aiChoice: "Mistral",
+    aiChoice: "mistral",
     themeChoice: "cyberpunk",
-    apiKey: ""
+    apiKey: "",
+    apiUrl: ""
 };
 
 const prompt = `
@@ -110,6 +117,16 @@ function setTheme(themeName) {
     localStorage.setItem("nat2bool-theme", themeName);
 }
 
+function updateApiUrlVisibility() {
+    if (["ollama"].includes(aiChoiceSelect.value)) {
+        apiUrlGroup.style.display = "flex";
+    } else {
+        apiUrlGroup.style.display = "none";
+    }
+}
+aiChoiceSelect.addEventListener("change", updateApiUrlVisibility);
+
+
 
 // === Gestion des paramètres ===
 function loadSettings() {
@@ -129,6 +146,10 @@ function loadSettings() {
     aiChoiceSelect.value = settings.aiChoice;
     themeChoiceSelect.value = settings.themeChoice;
     apiKeyInput.value = settings.apiKey;
+
+    apiUrlInput.value = settings.apiUrl || DEFAULT_SETTINGS.apiUrl;
+
+    updateApiUrlVisibility()
     setTheme(settings.themeChoice);
 }
 
@@ -138,7 +159,8 @@ function saveSettings() {
         searchEngine: searchEngineSelect.value,
         aiChoice: aiChoiceSelect.value,
         themeChoice: themeChoiceSelect.value,
-        apiKey: apiKeyInput.value
+        apiKey: apiKeyInput.value,
+        apiUrl: apiUrlInput.value
     };
 
     localStorage.setItem("nat2bool-settings", JSON.stringify(settings));
@@ -257,7 +279,7 @@ async function handleGenerateClick() {
     let resultText = "";
 
     try {
-        if (settings.aiChoice === "Mistral") {
+        if (settings.aiChoice === "mistral") {
             if (!settings.apiKey) {
                 console.error("Clé API Mistral non fournie !");
                 return;
