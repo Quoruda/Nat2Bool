@@ -383,6 +383,14 @@ function init() {
     loadSettings();
     setupModal();
     if (generateBtn) generateBtn.addEventListener("click", handleGenerateClick);
+    if (searchInput) {
+        searchInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Empêche le comportement par défaut
+                handleGenerateClick();
+            }
+        });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", init);
