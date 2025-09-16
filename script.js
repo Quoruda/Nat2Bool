@@ -1,4 +1,3 @@
-// === Sélecteurs DOM globaux ===
 const generateBtn = document.getElementById("generateBtn");
 const searchInput = document.getElementById("searchInput");
 
@@ -17,7 +16,6 @@ const apiUrlInput = document.getElementById("apiUrl");
 const modelGroup = document.getElementById("modelGroup");
 const modelInput = document.getElementById("model");
 
-// === Etat local ===
 let isGenerating = false;
 let originalGenerateText = generateBtn ? generateBtn.innerText : "Generate";
 
@@ -143,7 +141,6 @@ aiChoiceSelect.addEventListener("change", updateApiUrlVisibility);
 
 
 
-// === Gestion des paramètres ===
 function loadSettings() {
     const saved = localStorage.getItem("nat2bool-settings");
     let settings = DEFAULT_SETTINGS;
@@ -187,7 +184,6 @@ function saveSettings() {
     return settings;
 }
 
-// === Helpers pour l'état du bouton ===
 function startGeneration(text) {
     if (!generateBtn) return;
     if (isGenerating) return;
@@ -207,7 +203,6 @@ function endGeneration() {
 }
 
 
-// === API Calls ===
 async function callMistralAPI(userMessage, apiKey) {
     const url = "https://api.mistral.ai/v1/chat/completions";
     const model = "mistral-small-latest"; // adapter si besoin
@@ -243,7 +238,6 @@ async function callMistralAPI(userMessage, apiKey) {
 }
 
 async function callOllamaAPI(userMessage, apiUrl, model = "llama3.2") {
-    // Construire l'URL complète pour l'API Ollama
     const fullUrl = apiUrl.endsWith('/') ? apiUrl + "api/chat" : apiUrl + "/api/chat";
 
     const body = {
@@ -275,7 +269,6 @@ async function callOllamaAPI(userMessage, apiUrl, model = "llama3.2") {
         const respJson = await response.json();
         console.log("Réponse brute Ollama :", respJson);
 
-        // Ollama avec /api/chat retourne la réponse dans message.content
         return respJson.message.content;
     } catch (err) {
         console.error("Erreur fetch Ollama :", err);
@@ -291,23 +284,19 @@ function handleLLMResponse(responseText) {
 
     const trimmed = responseText.trim();
 
-    // Vérifie si c'est une URL (commence par http:// ou https:// ou ressemble à un domaine)
     const urlPattern = /^(https?:\/\/[^\s]+)$/i;
     const domainPattern = /^[a-z0-9.-]+\.[a-z]{2,}$/i;
 
     if (urlPattern.test(trimmed) || domainPattern.test(trimmed)) {
-        // Cas 1: C'est un lien → redirection directe
         const url = trimmed.startsWith("http") ? trimmed : "https://" + trimmed;
         window.location.href = url;
     } else {
-        // Cas 2: C'est une requête → recherche Google
         const googleUrl = "https://www.google.com/search?q=" + encodeURIComponent(trimmed);
         window.location.href = googleUrl;
     }
 }
 
 
-// === Gestion de la recherche ===
 async function handleGenerateClick() {
     if (isGenerating) {
         console.log("Génération déjà en cours – attente de la fin.");
@@ -332,7 +321,6 @@ async function handleGenerateClick() {
 
     let currentPrompt = prompt + query;
 
-    // démarrer l'état "génération"
     startGeneration("Searching...");
 
     let resultText = "";
@@ -355,7 +343,6 @@ async function handleGenerateClick() {
             resultText = await callOllamaAPI(currentPrompt, settings.apiUrl, settings.model);
             console.log("Contenu retourné par Ollama :", resultText);
         } else {
-            // comportement pour autres IA (pour l'instant on log)
             console.log("IA non supportée sélectionnée");
             alert("Cette IA n'est pas encore supportée.");
         }
@@ -369,12 +356,10 @@ async function handleGenerateClick() {
             console.error("Erreur API :", resultText);
             alert("Erreur lors de l'appel à l'API : " + resultText);
         }
-        // réactiver le bouton quoi qu'il arrive
         endGeneration();
     }
 }
 
-// === Gestion du modal ===
 function setupModal() {
     if (settingsBtn) settingsBtn.addEventListener("click", () => {
          if (modal) modal.style.display = "flex";
@@ -394,12 +379,10 @@ function setupModal() {
 
 
 
-// === Initialisation ===
 function init() {
     loadSettings();
     setupModal();
     if (generateBtn) generateBtn.addEventListener("click", handleGenerateClick);
 }
 
-// lancer init après chargement DOM
 document.addEventListener("DOMContentLoaded", init);
