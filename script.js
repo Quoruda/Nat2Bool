@@ -14,7 +14,8 @@ const apiKeyInput = document.getElementById("apiKey");
 
 const apiUrlGroup = document.getElementById("apiUrlGroup");
 const apiUrlInput = document.getElementById("apiUrl");
-
+const modelGroup = document.getElementById("modelGroup");
+const modelInput = document.getElementById("model");
 
 // === Etat local ===
 let isGenerating = false;
@@ -27,7 +28,7 @@ const DEFAULT_SETTINGS = {
     aiChoice: "mistral",
     themeChoice: "cyberpunk",
     apiKey: "",
-    apiUrl: ""
+    apiUrl: "http://localhost:11434"
 };
 
 const prompt = `
@@ -123,7 +124,6 @@ User:
 
 
 
-
 function setTheme(themeName) {
     const themeLink = document.getElementById("themeStylesheet");
     themeLink.href = `styles/${themeName}.css`;
@@ -133,8 +133,10 @@ function setTheme(themeName) {
 function updateApiUrlVisibility() {
     if (["ollama"].includes(aiChoiceSelect.value)) {
         apiUrlGroup.style.display = "flex";
+        modelGroup.style.display = "flex";
     } else {
         apiUrlGroup.style.display = "none";
+        modelGroup.style.display = "none";
     }
 }
 aiChoiceSelect.addEventListener("change", updateApiUrlVisibility);
@@ -161,6 +163,7 @@ function loadSettings() {
     apiKeyInput.value = settings.apiKey;
 
     apiUrlInput.value = settings.apiUrl || DEFAULT_SETTINGS.apiUrl;
+    modelInput.value = settings.model || DEFAULT_SETTINGS.model;
 
     updateApiUrlVisibility()
     setTheme(settings.themeChoice);
@@ -173,7 +176,8 @@ function saveSettings() {
         aiChoice: aiChoiceSelect.value,
         themeChoice: themeChoiceSelect.value,
         apiKey: apiKeyInput.value,
-        apiUrl: apiUrlInput.value
+        apiUrl: apiUrlInput.value,
+        model: modelInput.value
     };
 
     localStorage.setItem("nat2bool-settings", JSON.stringify(settings));
@@ -238,6 +242,47 @@ async function callMistralAPI(userMessage, apiKey) {
     }
 }
 
+async function callOllamaAPI(userMessage, apiUrl, model = "llama3.2") {
+    // Construire l'URL complète pour l'API Ollama
+    const fullUrl = apiUrl.endsWith('/') ? apiUrl + "api/chat" : apiUrl + "/api/chat";
+
+    const body = {
+        model: model,
+        messages: [
+            {
+                role: "user",
+                content: userMessage
+            }
+        ],
+        stream: false
+    };
+
+    try {
+        const response = await fetch(fullUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            console.error("Erreur API Ollama :", response.status, errText);
+            return `ERROR ${response.status}: ${errText}`;
+        }
+
+        const respJson = await response.json();
+        console.log("Réponse brute Ollama :", respJson);
+
+        // Ollama avec /api/chat retourne la réponse dans message.content
+        return respJson.message.content;
+    } catch (err) {
+        console.error("Erreur fetch Ollama :", err);
+        return `FETCH_ERROR: ${err.message || err}`;
+    }
+}
+
 function handleLLMResponse(responseText) {
     if (!responseText || typeof responseText !== "string") {
         console.error("Invalid LLM response");
@@ -265,7 +310,7 @@ function handleLLMResponse(responseText) {
 // === Gestion de la recherche ===
 async function handleGenerateClick() {
     if (isGenerating) {
-        console.log("Génération déjà en cours — attente de la fin.");
+        console.log("Génération déjà en cours – attente de la fin.");
         return;
     }
 
@@ -278,13 +323,14 @@ async function handleGenerateClick() {
     const settings = {
         searchEngine: searchEngineSelect?.value,
         aiChoice: aiChoiceSelect?.value,
-        apiKey: apiKeyInput?.value
+        apiKey: apiKeyInput?.value,
+        apiUrl: apiUrlInput?.value,
+        model: modelInput?.value
     };
 
     console.log("Recherche :", query, "avec paramètres :", settings);
 
     let currentPrompt = prompt + query;
-
 
     // démarrer l'état "génération"
     startGeneration("Searching...");
@@ -295,17 +341,33 @@ async function handleGenerateClick() {
         if (settings.aiChoice === "mistral") {
             if (!settings.apiKey) {
                 console.error("Clé API Mistral non fournie !");
+                alert("Veuillez configurer votre clé API Mistral dans les paramètres.");
                 return;
             }
             resultText = await callMistralAPI(currentPrompt, settings.apiKey);
             console.log("Contenu retourné par Mistral :", resultText);
+        } else if (settings.aiChoice === "ollama") {
+            if (!settings.apiUrl) {
+                console.error("URL API Ollama non fournie !");
+                alert("Veuillez configurer l'URL de votre serveur Ollama dans les paramètres.");
+                return;
+            }
+            resultText = await callOllamaAPI(currentPrompt, settings.apiUrl, settings.model);
+            console.log("Contenu retourné par Ollama :", resultText);
         } else {
             // comportement pour autres IA (pour l'instant on log)
-            console.log("IA non-Mistral sélectionnée — pas encore implémentée");
+            console.log("IA non supportée sélectionnée");
+            alert("Cette IA n'est pas encore supportée.");
         }
+    } catch (error) {
+        console.error("Erreur lors de l'appel API :", error);
+        alert("Erreur lors de l'appel à l'API. Vérifiez votre configuration et votre connexion.");
     } finally {
-        if(resultText !== ""){
+        if(resultText !== "" && !resultText.startsWith("ERROR") && !resultText.startsWith("FETCH_ERROR")) {
             handleLLMResponse(resultText);
+        } else if (resultText.startsWith("ERROR") || resultText.startsWith("FETCH_ERROR")) {
+            console.error("Erreur API :", resultText);
+            alert("Erreur lors de l'appel à l'API : " + resultText);
         }
         // réactiver le bouton quoi qu'il arrive
         endGeneration();

@@ -68,14 +68,17 @@
                 <label for="aiChoice">IA</label>
                 <select id="aiChoice">
                     <option value="mistral">Mistral</option>
-                    <option value="ollama">Ollama (Not functional)</option>
+                    <option value="ollama">Ollama</option>
                 </select>
             </div>
             <div class="settings-group" id="apiUrlGroup" style="display: none;">
                 <label for="apiUrl">API URL</label>
                 <input type="text" id="apiUrl" placeholder="http://localhost:11434/api/generate">
-              </div>
-
+            </div>
+            <div class="settings-group" id="modelGroup" style="display: none;">
+                <label for="model">Model</label>
+                <input type="text" id="model" placeholder="llama3.2">
+            </div>
             <div class="settings-group">
                 <label for="apiKey">API Key</label>
                 <input type="password" id="apiKey" placeholder="Enter your API key...">
