@@ -3,8 +3,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![AI Powered](https://img.shields.io/badge/AI-Local-blueviolet)]()
 
+
 **Nat2Bool** is a modern web app that helps you transform **natural language queries** into **optimized boolean or advanced search queries**.
 Powered by LLMs like **Mistral** or **OpenAI**, it takes plain requests (e.g. *"scientific articles about renewable energy after 2020"*) and generates precise queries for Google, Bing, DuckDuckGo, or any search engine.
+
+![ScreenShot](nat2bool_screenshot.png "ScreenShot")
+
 
 🚀 With Nat2Bool, you can go from **"I don’t know search operators"** to **expert-level queries** instantly.
 
