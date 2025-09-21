@@ -12,6 +12,8 @@ Powered by LLMs like **Mistral** or **OpenAI**, it takes plain requests (e.g. *"
 
 🚀 With Nat2Bool, you can go from **"I don’t know search operators"** to **expert-level queries** instantly.
 
+You can try the project [here](https://quoruda.github.io/Nat2Bool/):
+
 ---
 
 ## ✨ Features
